@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-    <title>Kärcher Copy Constructor | Медиалингвистический конструктор рекламы</title>
+    <title>Конструктор рекламы уборочной техники | Проверка и генерация рекламных текстов в социальных сетях</title>
     <style>
         * {
             margin: 0;
@@ -209,14 +209,14 @@
 <div class="container">
     <div class="header">
         <h1>🧼 <span>Kärcher</span> Copy Constructor</h1>
-        <div class="badge">медиалингвистический конструктор рекламы · на основе анализа 307 постов (2024)</div>
+        <div class="badge">Проверка и генерация рекламных текстов для социальных сетей</div>
     </div>
 
     <!-- выбор формата -->
     <div class="format-menu">
         <button class="format-btn" data-format="1">📢 Акция / скидка</button>
         <button class="format-btn active" data-format="2">📦 Описание товара</button>
-        <button class="format-btn" data-format="3">🎬 Короткий клип</button>
+        <button class="format-btn" data-format="3">🎬 Короткий видео-ролик (клип)</button>
     </div>
 
     <!-- переключение режимов -->
@@ -228,7 +228,7 @@
     <!-- панель ПРОВЕРКА ТЕКСТА -->
     <div id="checkPanel" class="panel">
         <h3 style="margin-bottom: 0.8rem;">📝 Введите рекламный текст для анализа</h3>
-        <textarea id="checkTextarea" rows="8" placeholder="Пример: «Не тратьте время на уборку — робот-пылесос Kärcher RCV 5 уберется за вас! Интеллектуальный помощник. Мощность 4000 Па, HEPA 13 задерживает 99,95% аллергенов. С заботой о вас, Kärcher.»"></textarea>
+        <textarea id="checkTextarea" rows="8" placeholder="Пример: «Не тратьте время на уборку — робот-пылесос уберется за вас! Интеллектуальный помощник. Мощность 4000 Па, HEPA 13 задерживает 99,95% аллергенов. С заботой о вас!»"></textarea>
         <button id="checkBtn">Проверить текст</button>
         <div id="reportContainer" class="report"></div>
         <div id="suggestionsContainer"></div>
@@ -249,7 +249,7 @@
     </div>
 
     <div class="footer">
-        🧪 На основе данных ВКР: оптимально 5–7 технических терминов · слоган + эхо-фраза повышают вовлечение до +50% · олицетворения дают +60%
+        🧪 А Вы знали, что в такой рекламе: оптимально 5–7 технических терминов · слоган + эхо-фраза повышают вовлечение до +50% · олицетворения дают +60%
     </div>
 </div>
 
@@ -364,8 +364,8 @@
         const techCount = countTechTerms(text);
         if (techCount > 7) suggestions.push(`💡 Уменьшите технические термины до 5–7 (сейчас ${techCount}), оставьте только ключевые с пояснением выгоды.`);
         if (techCount < 3 && techCount > 0) suggestions.push(`💡 Добавьте 2–3 технические характеристики с выгодой (например, "4000 Па — справится с любым мусором").`);
-        if (!hasPersonification(text)) suggestions.push(`💡 Используйте олицетворение: «робот не заблудится», «пылесос сам отправится на базу», «наш трудяга» (+60% вовлечения).`);
-        if (!hasStructuredList(text)) suggestions.push(`💡 Разбейте текст на маркированный список: • пункт 1  • пункт 2`);
+        if (!hasPersonification(text)) suggestions.push(`💡 Попробуйте использовать олицетворение: «робот не заблудится», «пылесос сам отправится на базу», «наш трудяга» (+60% вовлечения).`);
+        if (!hasStructuredList(text)) suggestions.push(`💡 Разбейте текст на маркированный список для лучшей наглядности: • пункт 1  • пункт 2`);
         if (!hasAntithesis(text)) suggestions.push(`💡 Противопоставление: «В отличие от обычной швабры, электрошвабра Kärcher справляется на 20% быстрее».`);
         return suggestions;
     }
@@ -459,7 +459,7 @@
         }
         const reportHtml = generateReport(text, currentFormatId);
         const suggestions = getSuggestions(text, currentFormatId);
-        let sugHtml = `<div class="suggestion"><strong>📌 Рекомендации по улучшению (на основе исследования):</strong><br>`;
+        let sugHtml = `<div class="suggestion"><strong>📌 Несколько рекомендаций по улучшению:</strong><br>`;
         if (suggestions.length === 0) sugHtml += `✅ Текст уже близок к эталону!`;
         else sugHtml += suggestions.map(s => `• ${s}`).join("<br>");
         sugHtml += `</div>`;
