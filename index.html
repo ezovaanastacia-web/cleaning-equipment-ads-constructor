@@ -200,9 +200,103 @@
             margin-top: 2rem;
         }
         @media (max-width: 700px) {
-            .panel { padding: 1.2rem; }
-            .format-btn { padding: 0.5rem 1rem; font-size: 0.9rem; }
-        }
+    body {
+        padding: 1rem 0.8rem;
+    }
+
+    /* Меню форматов — кнопки в строку, но не на всю ширину */
+    .format-menu {
+        gap: 0.6rem;
+        justify-content: center;
+        flex-wrap: wrap;
+    }
+    .format-btn {
+        flex: 0 1 auto;           /* не растягиваются */
+        padding: 0.5rem 1rem;
+        font-size: 0.85rem;
+        min-width: auto;
+        border-radius: 40px;
+    }
+
+    /* Переключатель режимов (Проверить / Сгенерировать) */
+    .mode-tabs {
+        gap: 0.8rem;
+        justify-content: center;
+    }
+    .mode-tab {
+        font-size: 0.9rem;
+        padding: 0.4rem 1rem;
+        border-radius: 40px;
+    }
+
+    /* Основные кнопки действий (Проверить, Сгенерировать, Скопировать) */
+    button:not(.format-btn):not(.mode-tab) {
+        width: auto;
+        min-width: 140px;
+        padding: 0.6rem 1.2rem;
+        font-size: 0.9rem;
+        display: inline-block;
+        margin-top: 0.5rem;
+    }
+
+    /* Поля ввода и textarea */
+    input, textarea, select {
+        font-size: 16px; /* предотвращает зум в iOS */
+        padding: 0.7rem;
+        border-radius: 24px;
+    }
+
+    /* Блок с двумя выпадающими списками (слоган и эхо-фраза) */
+    .flex-row {
+        flex-direction: column;
+        gap: 0.6rem;
+    }
+    .flex-row > * {
+        width: 100%;
+    }
+
+    /* Панели */
+    .panel {
+        padding: 1.2rem;
+        border-radius: 24px;
+    }
+
+    /* Отчёт и рекомендации */
+    .report-item {
+        font-size: 0.85rem;
+        flex-wrap: wrap;
+    }
+
+    /* Сгенерированный текст */
+    .generated-box {
+        font-size: 0.9rem;
+        padding: 0.8rem;
+    }
+
+    .header h1 {
+        font-size: 1.5rem;
+    }
+    .badge {
+        font-size: 0.7rem;
+    }
+}
+
+/* Для совсем маленьких экранов (до 480px) – чуть меньше кнопки */
+@media (max-width: 480px) {
+    .format-btn {
+        padding: 0.4rem 0.8rem;
+        font-size: 0.75rem;
+    }
+    button:not(.format-btn):not(.mode-tab) {
+        min-width: 120px;
+        padding: 0.5rem 1rem;
+        font-size: 0.85rem;
+    }
+    .mode-tab {
+        font-size: 0.8rem;
+        padding: 0.3rem 0.8rem;
+    }
+}
     </style>
 </head>
 <body>
