@@ -1,0 +1,508 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>Kärcher Copy Constructor | Медиалингвистический конструктор рекламы</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
+            background: #f5f7fa;
+            color: #1e2a3a;
+            line-height: 1.5;
+            padding: 2rem 1rem;
+        }
+
+        .container {
+            max-width: 1300px;
+            margin: 0 auto;
+        }
+
+        /* header */
+        .header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+        .header h1 {
+            font-size: 2rem;
+            background: linear-gradient(135deg, #1e2a3a 0%, #2c3e4e 100%);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            letter-spacing: -0.5px;
+        }
+        .header h1 span {
+            color: #f5b81b;
+            background: none;
+            -webkit-background-clip: unset;
+            background-clip: unset;
+        }
+        .badge {
+            background: #f5b81b20;
+            display: inline-block;
+            padding: 0.3rem 1rem;
+            border-radius: 40px;
+            font-size: 0.8rem;
+            color: #c17e0a;
+            margin-top: 0.5rem;
+            font-weight: 500;
+        }
+
+        /* формат-меню */
+        .format-menu {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-bottom: 2rem;
+        }
+        .format-btn {
+            background: white;
+            border: 2px solid #e2e8f0;
+            padding: 0.8rem 1.8rem;
+            border-radius: 60px;
+            font-weight: 600;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.2s;
+            color: #2d3e50;
+        }
+        .format-btn.active {
+            background: #f5b81b;
+            border-color: #f5b81b;
+            color: #1e2a3a;
+            box-shadow: 0 4px 10px rgba(245,184,27,0.3);
+        }
+        .format-btn:hover:not(.active) {
+            border-color: #f5b81b;
+            background: #fef7e0;
+        }
+
+        /* режимы */
+        .mode-tabs {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            margin-bottom: 2rem;
+            border-bottom: 2px solid #e2e8f0;
+            padding-bottom: 0.5rem;
+        }
+        .mode-tab {
+            font-size: 1.1rem;
+            font-weight: 600;
+            padding: 0.5rem 1.2rem;
+            border-radius: 40px;
+            cursor: pointer;
+            background: transparent;
+            transition: 0.2s;
+        }
+        .mode-tab.active {
+            background: #1e2a3a;
+            color: white;
+        }
+
+        /* панели */
+        .panel {
+            background: white;
+            border-radius: 32px;
+            box-shadow: 0 12px 30px rgba(0,0,0,0.05);
+            padding: 2rem;
+            margin-bottom: 2rem;
+        }
+        textarea, input, select {
+            width: 100%;
+            padding: 1rem;
+            border-radius: 20px;
+            border: 1px solid #cbd5e1;
+            font-family: inherit;
+            font-size: 1rem;
+            transition: 0.2s;
+            margin-bottom: 1rem;
+        }
+        textarea:focus, input:focus, select:focus {
+            outline: none;
+            border-color: #f5b81b;
+            box-shadow: 0 0 0 3px #f5b81b30;
+        }
+        button {
+            background: #f5b81b;
+            border: none;
+            padding: 0.8rem 1.8rem;
+            border-radius: 40px;
+            font-weight: bold;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: 0.2s;
+            color: #1e2a3a;
+        }
+        button:hover {
+            background: #e5a80a;
+            transform: translateY(-2px);
+        }
+        .report {
+            background: #f8fafc;
+            border-radius: 24px;
+            padding: 1.5rem;
+            margin-top: 1.5rem;
+            border-left: 6px solid #f5b81b;
+        }
+        .report-item {
+            padding: 0.5rem 0;
+            border-bottom: 1px solid #e2e8f0;
+            display: flex;
+            gap: 0.8rem;
+            align-items: baseline;
+        }
+        .report-item:last-child {
+            border: none;
+        }
+        .good { color: #2b7e3a; font-weight: 500; }
+        .bad { color: #c2410c; }
+        .warn { color: #e68a2e; }
+        .suggestion {
+            background: #fff9e8;
+            padding: 1rem;
+            border-radius: 20px;
+            margin-top: 1rem;
+        }
+        .generated-box {
+            background: #f1f5f9;
+            padding: 1.5rem;
+            border-radius: 20px;
+            white-space: pre-wrap;
+            font-family: inherit;
+            margin: 1rem 0;
+            border: 1px solid #e2e8f0;
+        }
+        .flex-row {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+            align-items: flex-end;
+        }
+        .flex-row > * {
+            flex: 1;
+        }
+        hr {
+            margin: 1.5rem 0;
+            border-color: #eef2f6;
+        }
+        .footer {
+            text-align: center;
+            font-size: 0.8rem;
+            color: #5c6f87;
+            margin-top: 2rem;
+        }
+        @media (max-width: 700px) {
+            .panel { padding: 1.2rem; }
+            .format-btn { padding: 0.5rem 1rem; font-size: 0.9rem; }
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="header">
+        <h1>🧼 <span>Kärcher</span> Copy Constructor</h1>
+        <div class="badge">медиалингвистический конструктор рекламы · на основе анализа 307 постов (2024)</div>
+    </div>
+
+    <!-- выбор формата -->
+    <div class="format-menu">
+        <button class="format-btn" data-format="1">📢 Акция / скидка</button>
+        <button class="format-btn active" data-format="2">📦 Описание товара</button>
+        <button class="format-btn" data-format="3">🎬 Короткий клип</button>
+    </div>
+
+    <!-- переключение режимов -->
+    <div class="mode-tabs">
+        <div class="mode-tab active" data-mode="check">🔍 Проверить мой текст</div>
+        <div class="mode-tab" data-mode="generate">✨ Сгенерировать текст</div>
+    </div>
+
+    <!-- панель ПРОВЕРКА ТЕКСТА -->
+    <div id="checkPanel" class="panel">
+        <h3 style="margin-bottom: 0.8rem;">📝 Введите рекламный текст для анализа</h3>
+        <textarea id="checkTextarea" rows="8" placeholder="Пример: «Не тратьте время на уборку — робот-пылесос Kärcher RCV 5 уберется за вас! Интеллектуальный помощник. Мощность 4000 Па, HEPA 13 задерживает 99,95% аллергенов. С заботой о вас, Kärcher.»"></textarea>
+        <button id="checkBtn">Проверить текст</button>
+        <div id="reportContainer" class="report"></div>
+        <div id="suggestionsContainer"></div>
+    </div>
+
+    <!-- панель ГЕНЕРАЦИЯ ТЕКСТА -->
+    <div id="generatePanel" class="panel" style="display: none;">
+        <h3 style="margin-bottom: 0.8rem;">⚙️ Сгенерировать рекламный текст по параметрам</h3>
+        <input type="text" id="modelName" placeholder="Название модели (например, RCV 5, DS 6 Plus, WV 7)">
+        <textarea id="techSpecs" rows="4" placeholder="Технические характеристики (каждая с новой строки)&#10;Пример:&#10;4000 Па сила всасывания&#10;HEPA 13 фильтр&#10;LiDAR навигация"></textarea>
+        <div class="flex-row">
+            <select id="sloganSelect"></select>
+            <select id="echoSelect"></select>
+        </div>
+        <button id="generateBtn">✨ Собрать текст</button>
+        <div id="generatedTextArea" class="generated-box" style="display: none;"></div>
+        <button id="copyGeneratedBtn" style="background: #2c3e4e; color: white; margin-top: 0.5rem; display: none;">📋 Скопировать текст</button>
+    </div>
+
+    <div class="footer">
+        🧪 На основе данных ВКР: оптимально 5–7 технических терминов · слоган + эхо-фраза повышают вовлечение до +50% · олицетворения дают +60%
+    </div>
+</div>
+
+<script>
+    // --------------------------------------------------------------
+    // 1. ДАННЫЕ ИЗ ИССЛЕДОВАНИЯ (Excel)
+    // --------------------------------------------------------------
+    const DATA = {
+        // слоганы по форматам (format_id)
+        slogans: {
+            1: [ "Не упустите ни единого солнечного лучика!", "Лёгкая уборка стала доступнее", "Встречаем новый сезон скидками" ],
+            2: [ "Не тратьте время на уборку, [model] уберется за вас!", "С этим прибором вам больше не придется мыть полы руками", "Всем, кто заботится о чистоте и свежем воздухе дома, Kärcher рекомендует…", "Интеллектуальный помощник для вашего дома" ],
+            3: [ "Он убирает, вы отдыхаете", "Уборка – это легко, когда у вас есть [model]" ]
+        },
+        // эхо-фразы по форматам
+        echoPhrases: {
+            1: [ "Приятных вам покупок! Уборка – это легко, когда у вас есть […]", "С заботой о вас и чистоте вашего дома!", "С заботой о вас и ваших зимних каникулах!" ],
+            2: [ "С заботой о вас, Kärcher", "[model] уберётся за вас!", "Прощайте, разводы! С [model] ваша ванная комната будет сиять!" ],
+            3: [ "Он убирает, вы отдыхаете", "С заботой о вас, Kärcher" ]
+        },
+        // лексика для проверки
+        personificationKeywords: /не заблудится|не подведёт|трудяга|умница|помощник|не упадёт|сам отправится|робот убирается|шyстрый трудяга/i,
+        epithetExamples: ["интеллектуальный", "мощный", "энергоэффективный", "стильный", "минималистичный", "маневренный", "лёгкая уборка", "приятная чистота"],
+        antonymPatterns: /в отличие от традиционных|эффективней по сравнению с|старый способ|останется в прошлом|ведро и тряпка/i,
+        // общие параметры
+        optTechTerms: { min: 5, max: 7 }
+    };
+
+    // текущий формат (1-акция,2-товар,3-клип)
+    let currentFormatId = 2;   // по умолчанию Описание товара
+    let currentMode = "check"; // check / generate
+
+    // --------------------------------------------------------------
+    // 2. ВСПОМОГАТЕЛЬНЫЕ ФУНКЦИИ АНАЛИЗА ТЕКСТА
+    // --------------------------------------------------------------
+    function countTechTerms(text) {
+        // ищем цифры + единицы (Па, мкм, %, см, кг, В, м/с, HEPA, LiDAR, м³/ч и т.д.)
+        const regex = /\d+\s*(Па|мкм|%|см|кг|В|м\/с|л|Вт|м³\/ч)|HEPA|LiDAR|аквафильтр|турбощетка|\d+\s*-?\s*ступенчатый/i;
+        const matches = text.match(regex) || [];
+        return matches.length;
+    }
+
+    function hasSlogan(text, formatId) {
+        const sl = DATA.slogans[formatId] || [];
+        // также ищем характерные признаки: восклицание + короткая фраза с призывом
+        const hasExclamation = /!/.test(text);
+        const hasTimeSave = /не тратьте время|уберется за вас|лёгкая уборка/i.test(text);
+        const hasDirectSlogan = sl.some(s => s.replace(/\[model\]/gi, '').length > 5 && text.includes(s.replace(/\[model\]/gi, '').trim()));
+        return hasDirectSlogan || (hasExclamation && hasTimeSave);
+    }
+
+    function hasEchoPhrase(text, formatId) {
+        const echoes = DATA.echoPhrases[formatId] || [];
+        const hasDirect = echoes.some(e => {
+            const clean = e.replace(/\[model\]|\[…\]/gi, '').replace(/\s+/g, ' ').trim();
+            return clean.length > 5 && text.includes(clean);
+        });
+        const hasCare = /с заботой о вас|забота о чистоте|приятных вам покупок/i.test(text);
+        return hasDirect || hasCare;
+    }
+
+    function hasPersonification(text) {
+        return DATA.personificationKeywords.test(text);
+    }
+
+    function hasStructuredList(text) {
+        // маркированный список: *, -, •, 1. и т.д.
+        return /(^|\n)[\*\-•]\s|\n\d+\.\s/.test(text);
+    }
+
+    function hasAntithesis(text) {
+        return DATA.antonymPatterns.test(text);
+    }
+
+    function hasAppeal(text) {
+        return /ваш дом|не тратьте время|получайте удовольствие|с заботой о вас|вам|вы отдыхаете/i.test(text);
+    }
+
+    // генерация отчёта
+    function generateReport(text, formatId) {
+        const techCount = countTechTerms(text);
+        const techOk = (techCount >= DATA.optTechTerms.min && techCount <= DATA.optTechTerms.max);
+        const sloganOk = hasSlogan(text, formatId);
+        const echoOk = hasEchoPhrase(text, formatId);
+        const personOk = hasPersonification(text);
+        const structOk = hasStructuredList(text);
+        const antithesisOk = hasAntithesis(text);
+        const appealOk = hasAppeal(text);
+
+        let reportHtml = `<div class="report-item"><strong>🔍 Результаты анализа</strong></div>`;
+        reportHtml += `<div class="report-item">${sloganOk ? '✅' : '❌'} Слоган: ${sloganOk ? 'присутствует' : 'не найден'} ${!sloganOk ? '<span class="bad">(снижает вовлечение до -50%)</span>' : ''}</div>`;
+        reportHtml += `<div class="report-item">${echoOk ? '✅' : '❌'} Эхо-фраза: ${echoOk ? 'есть' : 'отсутствует'} ${!echoOk ? '<span class="bad">(потеря до 40-50% отклика)</span>' : ''}</div>`;
+        reportHtml += `<div class="report-item">${techOk ? '✅' : '⚠️'} Технических терминов: ${techCount} (оптимум 5–7) ${techCount > 7 ? '<span class="bad">➜ перегрузка снижает вовлечение на 53%</span>' : techCount < 5 ? '<span class="warn">➜ добавьте 2–3 ключевых параметра</span>' : ''}</div>`;
+        reportHtml += `<div class="report-item">${personOk ? '✅' : '❌'} Олицетворение: ${personOk ? 'есть (+60% вовлечения)' : 'нет — можно добавить "робот не заблудится", "пылесос не подведёт"'}</div>`;
+        reportHtml += `<div class="report-item">${structOk ? '✅' : '⚠️'} Структурированность: ${structOk ? 'маркированный список' : 'сплошной текст (снижает читаемость)'}</div>`;
+        reportHtml += `<div class="report-item">${antithesisOk ? '✅' : '○'} Антонимы/сравнение: ${antithesisOk ? 'есть (эффективно для контраста)' : 'можно добавить "в отличие от традиционных" или "ведро и тряпка останутся в прошлом"'}</div>`;
+        reportHtml += `<div class="report-item">${appealOk ? '✅' : '○'} Обращение к потребителю: ${appealOk ? 'присутствует' : 'добавьте "ваш дом", "не тратьте время" для доверительной тональности'}</div>`;
+
+        return reportHtml;
+    }
+
+    function getSuggestions(text, formatId) {
+        let suggestions = [];
+        if (!hasSlogan(text, formatId)) {
+            const sl = DATA.slogans[formatId] || DATA.slogans[2];
+            suggestions.push(`💡 Добавьте слоган: ${sl[0]}`);
+        }
+        if (!hasEchoPhrase(text, formatId)) {
+            const echo = DATA.echoPhrases[formatId] || DATA.echoPhrases[2];
+            suggestions.push(`💡 Эхо-фраза: ${echo[0]}`);
+        }
+        const techCount = countTechTerms(text);
+        if (techCount > 7) suggestions.push(`💡 Уменьшите технические термины до 5–7 (сейчас ${techCount}), оставьте только ключевые с пояснением выгоды.`);
+        if (techCount < 3 && techCount > 0) suggestions.push(`💡 Добавьте 2–3 технические характеристики с выгодой (например, "4000 Па — справится с любым мусором").`);
+        if (!hasPersonification(text)) suggestions.push(`💡 Используйте олицетворение: «робот не заблудится», «пылесос сам отправится на базу», «наш трудяга» (+60% вовлечения).`);
+        if (!hasStructuredList(text)) suggestions.push(`💡 Разбейте текст на маркированный список: • пункт 1  • пункт 2`);
+        if (!hasAntithesis(text)) suggestions.push(`💡 Противопоставление: «В отличие от обычной швабры, электрошвабра Kärcher справляется на 20% быстрее».`);
+        return suggestions;
+    }
+
+    // --------------------------------------------------------------
+    // 3. ГЕНЕРАЦИЯ ТЕКСТА
+    // --------------------------------------------------------------
+    function buildGeneratedText() {
+        const model = document.getElementById("modelName").value.trim();
+        const modelDisplay = model || "[модель]";
+        const rawSpecs = document.getElementById("techSpecs").value;
+        let specsList = rawSpecs.split(/\r?\n/).filter(s => s.trim().length > 0);
+        const selectedSloganRaw = document.getElementById("sloganSelect").value;
+        const selectedEchoRaw = document.getElementById("echoSelect").value;
+        let slogan = selectedSloganRaw.replace(/\[model\]/g, modelDisplay);
+        let echo = selectedEchoRaw.replace(/\[model\]/g, modelDisplay).replace(/\[…\]/g, "Kärcher");
+
+        // собираем основной текст: для формата товар/акция используем маркированный список
+        let mainText = "";
+        if (specsList.length > 0) {
+            if (currentFormatId === 1 || currentFormatId === 2) {
+                mainText = "\n" + specsList.map(s => `• ${s}`).join("\n");
+            } else {
+                // клип – короткий перечислительный стиль
+                mainText = "\n" + specsList.join(". ");
+            }
+        } else {
+            mainText = "\n• Высокое качество очистки\n• Экономия времени";
+        }
+
+        let finalText = `${slogan}\n${mainText}\n\n${echo}`;
+        return finalText;
+    }
+
+    function refreshSloganEchoSelects() {
+        const sloganSelect = document.getElementById("sloganSelect");
+        const echoSelect = document.getElementById("echoSelect");
+        const slogansArray = DATA.slogans[currentFormatId] || DATA.slogans[2];
+        const echoesArray = DATA.echoPhrases[currentFormatId] || DATA.echoPhrases[2];
+
+        sloganSelect.innerHTML = slogansArray.map(s => `<option value="${s.replace(/"/g, '&quot;')}">${s}</option>`).join("");
+        echoSelect.innerHTML = echoesArray.map(e => `<option value="${e.replace(/"/g, '&quot;')}">${e}</option>`).join("");
+    }
+
+    // --------------------------------------------------------------
+    // 4. ОБРАБОТЧИКИ ИНТЕРФЕЙСА
+    // --------------------------------------------------------------
+    function applyFormatUi() {
+        document.querySelectorAll(".format-btn").forEach(btn => {
+            if (Number(btn.dataset.format) === currentFormatId) btn.classList.add("active");
+            else btn.classList.remove("active");
+        });
+        if (currentMode === "generate") refreshSloganEchoSelects();
+        // сброс отчёта при смене формата (опционально)
+        if (currentMode === "check") {
+            document.getElementById("reportContainer").innerHTML = "";
+            document.getElementById("suggestionsContainer").innerHTML = "";
+        }
+    }
+
+    function switchMode(mode) {
+        currentMode = mode;
+        const checkPanel = document.getElementById("checkPanel");
+        const genPanel = document.getElementById("generatePanel");
+        if (mode === "check") {
+            checkPanel.style.display = "block";
+            genPanel.style.display = "none";
+        } else {
+            checkPanel.style.display = "none";
+            genPanel.style.display = "block";
+            refreshSloganEchoSelects();
+            document.getElementById("generatedTextArea").style.display = "none";
+            document.getElementById("copyGeneratedBtn").style.display = "none";
+        }
+        // визуальное выделение табов
+        document.querySelectorAll(".mode-tab").forEach(tab => {
+            if ((mode === "check" && tab.innerText.includes("Проверить")) ||
+                (mode === "generate" && tab.innerText.includes("Сгенерировать"))) {
+                tab.classList.add("active");
+            } else tab.classList.remove("active");
+        });
+    }
+
+    // проверка текста по кнопке
+    document.getElementById("checkBtn").addEventListener("click", () => {
+        const text = document.getElementById("checkTextarea").value;
+        if (!text.trim()) {
+            document.getElementById("reportContainer").innerHTML = "<div class='report-item'>⚠️ Введите текст для проверки.</div>";
+            document.getElementById("suggestionsContainer").innerHTML = "";
+            return;
+        }
+        const reportHtml = generateReport(text, currentFormatId);
+        const suggestions = getSuggestions(text, currentFormatId);
+        let sugHtml = `<div class="suggestion"><strong>📌 Рекомендации по улучшению (на основе исследования):</strong><br>`;
+        if (suggestions.length === 0) sugHtml += `✅ Текст уже близок к эталону!`;
+        else sugHtml += suggestions.map(s => `• ${s}`).join("<br>");
+        sugHtml += `</div>`;
+        document.getElementById("reportContainer").innerHTML = reportHtml;
+        document.getElementById("suggestionsContainer").innerHTML = sugHtml;
+    });
+
+    // генерация и копирование
+    document.getElementById("generateBtn").addEventListener("click", () => {
+        const generated = buildGeneratedText();
+        const genDiv = document.getElementById("generatedTextArea");
+        genDiv.innerText = generated;
+        genDiv.style.display = "block";
+        const copyBtn = document.getElementById("copyGeneratedBtn");
+        copyBtn.style.display = "inline-block";
+        copyBtn.onclick = () => {
+            navigator.clipboard.writeText(generated).then(() => {
+                alert("Текст скопирован в буфер обмена!");
+            }).catch(() => alert("Не удалось скопировать"));
+        };
+    });
+
+    // выбор формата
+    document.querySelectorAll(".format-btn").forEach(btn => {
+        btn.addEventListener("click", () => {
+            currentFormatId = Number(btn.dataset.format);
+            applyFormatUi();
+            if (currentMode === "generate") refreshSloganEchoSelects();
+        });
+    });
+
+    // переключение режимов
+    document.querySelectorAll(".mode-tab").forEach(tab => {
+        tab.addEventListener("click", () => {
+            if (tab.innerText.includes("Проверить")) switchMode("check");
+            else switchMode("generate");
+        });
+    });
+
+    // инициализация UI
+    applyFormatUi();
+    switchMode("check");
+    refreshSloganEchoSelects();
+</script>
+</body>
+</html>
